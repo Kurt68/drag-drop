@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Task } from './Task'
+import { Droppable } from '@hello-pangea/dnd';
 
 const Container = styled.div`
   margin: 8px;
@@ -14,17 +15,20 @@ const TaskList = styled.div`
 `
 
 export function Column({ column, tasks }) {
-    console.log(tasks)
   return (
-    <>
-      <Container>
-        <Title>{column.title}</Title>
-        <TaskList>
-          {tasks.map((task) => (
-            <Task key={task.id} task={task} />
-          ))}
-        </TaskList>
-      </Container>
-    </>
+    <Container>
+      <Title>{column.title}</Title>
+      <Droppable droppableId={column.id}>
+        {(provided) => (
+          <TaskList ref={provided.innerRef} {...provided.droppableProps}>
+            {tasks.map((task, index) => (
+              <Task key={task.id} task={task} index={index} />
+            ))}
+            {provided.placeholder}
+            
+          </TaskList>
+        )}
+      </Droppable>
+    </Container>
   )
 }
