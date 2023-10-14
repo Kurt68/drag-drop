@@ -6,7 +6,6 @@ const Container = styled.div`
   margin: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
-  width: 220px;
   display: flex;
   flex-direction: column;
 `
@@ -17,8 +16,8 @@ const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.5s ease;
   background-color: ${(props) => (props.$isDraggingOver ? '#FBECB2' : 'white')};
-  flex-grow: 1;
-  min-height: 100px;
+
+  display: flex;
 `
 // snapshot object has properties to style component on drag
 // Draggable
@@ -36,7 +35,7 @@ export function Column({ column, tasks }) {
   return (
     <Container>
       <Title>{column.title}</Title>
-      <Droppable droppableId={column.id}>
+      <Droppable droppableId={column.id} direction='horizontal'>
         {(provided, snapshot) => (
           <TaskList
             ref={provided.innerRef}
