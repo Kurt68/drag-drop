@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Task } from './Task'
-import { Droppable } from '@hello-pangea/dnd'
+import { Droppable, Draggable } from '@hello-pangea/dnd'
 
 const Container = styled.div`
   margin: 8px;
@@ -9,6 +9,9 @@ const Container = styled.div`
   width: 220px;
   display: flex;
   flex-direction: column;
+  cursor: grab;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
 `
 const Title = styled.h3`
   padding: 8px;
@@ -16,7 +19,7 @@ const Title = styled.h3`
 const TaskList = styled.div`
   padding: 8px;
   transition: background-color 0.5s ease;
-  background-color: ${(props) => (props.$isDraggingOver ? '#FBECB2' : 'white')};
+  background-color: ${(props) => (props.$isDraggingOver ? '#FBECB2' : 'inherit')};
   flex-grow: 1;
   min-height: 100px;
 `
@@ -32,24 +35,28 @@ const TaskList = styled.div`
 //   draggingOverWith: 'task-1',
 // }
 
-export function Column({ column, tasks }) {
+export function Column({ column, tasks, index }) {
   return (
-    <Container>
-      <Title>{column.title}</Title>
-      <Droppable droppableId={column.id}>
-        {(provided, snapshot) => (
-          <TaskList
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            $isDraggingOver={snapshot.isDraggingOver}
-          >
-            {tasks.map((task, index) => (
-              <Task key={task.id} task={task} index={index} />
-            ))}
-            {provided.placeholder}
-          </TaskList>
-        )}
-      </Droppable>
-    </Container>
+    <Draggable draggableId={column.id} index={index}>
+      {(provided) => (
+        <Container {...provided.draggableProps} ref={provided.innerRef}>
+          <Title {...provided.dragHandleProps}>{column.title}</Title>
+          <Droppable droppableId={column.id} type="task">
+            {(provided, snapshot) => (
+              <TaskList
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                $isDraggingOver={snapshot.isDraggingOver}
+              >
+                {tasks.map((task, index) => (
+                  <Task key={task.id} task={task} index={index} />
+                ))}
+                {provided.placeholder}
+              </TaskList>
+            )}
+          </Droppable>
+        </Container>
+      )}
+    </Draggable>
   )
 }
