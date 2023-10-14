@@ -2,6 +2,12 @@ import initialData from './initial-data.js'
 import { Column } from './Column.jsx'
 import { DragDropContext } from '@hello-pangea/dnd'
 import { useState } from 'react'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`
 
 function App() {
   const [state, setState] = useState(initialData)
@@ -36,37 +42,80 @@ function App() {
       return
     }
 
-    const column = state.columns[source.droppableId]
-    const newTaskIds = Array.from(column.taskIds)
-    console.log(newTaskIds)
+    const start = state.columns[source.droppableId]
+    console.log(`Start:`, start)
 
-    newTaskIds.splice(source.index, 1)
-    newTaskIds.splice(destination.index, 0, draggableId)
+    const finish = state.columns[destination.droppableId]
+    console.log(`Finish:`, finish)
 
-    const newColumn = {
-      ...column,
-      taskIds: newTaskIds,
+    if (start === finish) {
+      const newTaskIds = Array.from(start.taskIds)
+      console.log(`New Tasks:`, newTaskIds)
+
+      newTaskIds.splice(source.index, 1)
+      console.log(`Source index`, source.index)
+
+      newTaskIds.splice(destination.index, 0, draggableId)
+      console.log(`Destination index`, destination.index)
+
+      console.log(`Draggable`, draggableId)
+
+      const newColumn = {
+        ...start,
+        taskIds: newTaskIds,
+      }
+      console.log(`New Column:`, newColumn)
+
+      const newState = {
+        ...state,
+        columns: {
+          ...state.columns,
+          [newColumn.id]: newColumn,
+        },
+      }
+      setState(newState)
+      return
     }
-    console.log(newColumn)
+    // Moving form one list to another
+    const startTaskIds = Array.from(start.taskIds)
+    startTaskIds.splice(source.index, 1)
+
+    const newStart = {
+      ...start,
+      taskIds: startTaskIds,
+    }
+    console.log(`New Start New Column:`, newStart)
+    const finishTaskIds = Array.from(finish.taskIds)
+    finishTaskIds.splice(destination.index, 0, draggableId)
+
+    const newFinish = {
+      ...finish,
+      taskIds: finishTaskIds,
+    }
+    console.log(`New Finish New Column:`, newFinish)
 
     const newState = {
       ...state,
       columns: {
         ...state.columns,
-        [newColumn.id]: newColumn,
-      
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish,
       },
     }
+    console.log(`New Start Id:`, newStart.id)
+    console.log(`New Finish Id:`, newFinish.id)
     setState(newState)
   }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {state.columnOrder.map((columnId) => {
-        const column = state.columns[columnId]
-        const tasks = column.taskIds.map((taskId) => state.tasks[taskId])
-        return <Column key={column.id} column={column} tasks={tasks} />
-      })}
+      <Container>
+        {state.columnOrder.map((columnId) => {
+          const column = state.columns[columnId]
+          const tasks = column.taskIds.map((taskId) => state.tasks[taskId])
+          return <Column key={column.id} column={column} tasks={tasks} />
+        })}
+      </Container>
     </DragDropContext>
   )
 }

@@ -6,6 +6,7 @@ const Container = styled.div`
   border-radius: 2px;
   padding: 8px;
   margin-bottom: 8px;
+  cursor: grab;
   background-color: ${(props) => (props.$isDragging ? '#072541' : 'white')};
   color: ${(props) => (props.$isDragging ? 'white' : '#072541')};
 `
