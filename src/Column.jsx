@@ -1,28 +1,26 @@
 import styled from 'styled-components'
 import { Task } from './Task'
 import { Droppable, Draggable } from '@hello-pangea/dnd'
-import React from 'react'
 
 const Container = styled.div`
-  margin: 8px;
-  border: 1px solid lightgrey;
-  width: 220px;
-  border-radius: 2px;
-
+  margin: 12px;
+  border: 1px solid #E4D00A;
+  width:100%;
   display: flex;
   flex-direction: column;
   cursor: grab;
-  background: white;
+  background: rgb(255, 248, 220);
   box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
 `
 const Title = styled.h3`
-  padding: 8px;
+  padding: 12px;
+  color: black;
 `
 const TaskList = styled.div`
-  padding: 8px;
+  padding: 12px;
   transition: background-color 0.5s ease;
   background-color: ${(props) =>
-    props.$isDraggingOver ? 'lightgrey' : 'inherit'};
+    props.$isDraggingOver ? '#F3E5AB' : 'inherit'};
   flex-grow: 1;
   min-height: 100px;
 `

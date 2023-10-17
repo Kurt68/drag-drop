@@ -3,14 +3,22 @@ import { Column } from './Column.jsx'
 import { DragDropContext, Droppable } from '@hello-pangea/dnd'
 import { useState } from 'react'
 import styled from 'styled-components'
+import useMediaQuery from '../util/useMediaQuery.js'
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
+ 
+  @media screen and (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
 `
 
 function App() {
   const [state, setState] = useState(initialData)
+
+  const isActive = useMediaQuery('(max-width: 768px)')
 
   let onDragEnd = {}
 
@@ -112,7 +120,11 @@ function App() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="all-columns" direction="horizontal" type="column">
+      <Droppable
+        droppableId="all-columns"
+        direction={isActive ? 'vertical' : 'horizontal'}
+        type="column"
+      >
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
             {state.columnOrder.map((columnId, index) => {

@@ -2,12 +2,12 @@ import styled from 'styled-components'
 import { Draggable } from '@hello-pangea/dnd'
 
 const Container = styled.div`
-  border: 1px solid lightgrey;
+  border: 1px solid #e4d00a;
   padding: 8px;
   margin-bottom: 8px;
 
-  background-color: ${(props) => (props.$isDragging ? '#072541' : 'white')};
-  color: ${(props) => (props.$isDragging ? 'white' : '#072541')};
+  background-color: ${(props) => (props.$isDragging ? '#FFFFE0' : 'white')};
+  color: ${(props) => (props.$isDragging ? 'black' : 'black')};
 
   cursor: grab;
 `
